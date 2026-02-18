@@ -1,10 +1,11 @@
 server:
   port: 8083
 
-spring:
-  application:
-    name: poliza-service
+cliente:
+  service:
+    url: http://localhost:8082
 
+spring:
   datasource:
     url: jdbc:h2:mem:polizasdb
     driverClassName: org.h2.Driver
@@ -14,8 +15,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
 
-  h2:
-    console:
-      enabled: true
+resilience4j:
+  circuitbreaker:
+    instances:
+      clienteService:
+        slidingWindowSize: 5
+        failureRateThreshold: 50

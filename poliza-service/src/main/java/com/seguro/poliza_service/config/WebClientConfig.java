@@ -1,0 +1,21 @@
+package com.seguro.poliza_service.config;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.function.client.WebClient;
+
+@Configuration
+public class WebClientConfig {
+
+    @Bean
+    public WebClient clienteWebClient(
+            @Value("${cliente.service.url}") String baseUrl) {
+
+        System.out.println(">>> Cliente base URL = " + baseUrl);
+
+        return WebClient.builder()
+                .baseUrl(baseUrl)
+                .build();
+    }
+}

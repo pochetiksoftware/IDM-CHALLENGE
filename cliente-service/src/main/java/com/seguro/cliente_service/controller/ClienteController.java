@@ -16,11 +16,11 @@ public class ClienteController {
 
     @PostMapping
     public Mono<ClienteResponse> crear(@Valid @RequestBody ClienteRequest request) {
-        return Mono.fromSupplier(() -> service.crearCliente(request));
+        return service.crear(request);
     }
 
     @GetMapping("/{documento}")
     public Mono<ClienteResponse> buscar(@PathVariable String documento) {
-        return Mono.fromSupplier(() -> service.buscarPorDocumento(documento));
+        return service.buscarPorDocumento(documento);
     }
 }

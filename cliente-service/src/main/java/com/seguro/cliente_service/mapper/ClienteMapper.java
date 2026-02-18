@@ -1,24 +1,26 @@
 package com.seguro.cliente_service.mapper;
 
 import com.seguro.cliente_service.dto.*;
-import com.seguro.cliente_service.model.Cliente;
+import com.seguro.cliente_service.entity.Cliente;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ClienteMapper {
 
-    public static Cliente toEntity(ClienteRequest request) {
+    public Cliente toEntity(ClienteRequest request) {
         return Cliente.builder()
-                .nombre(request.nombre())
                 .documento(request.documento())
+                .nombre(request.nombre())
                 .email(request.email())
                 .estado(request.estado())
                 .build();
     }
 
-    public static ClienteResponse toResponse(Cliente cliente) {
+    public ClienteResponse toResponse(Cliente cliente) {
         return new ClienteResponse(
                 cliente.getId(),
-                cliente.getNombre(),
                 cliente.getDocumento(),
+                cliente.getNombre(),
                 cliente.getEmail(),
                 cliente.getEstado()
         );

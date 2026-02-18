@@ -1,4 +1,4 @@
-package com.seguro.cliente_service.dto;
+package com.seguro.poliza_service.client;
 
 public record ClienteResponse(
         Long id,

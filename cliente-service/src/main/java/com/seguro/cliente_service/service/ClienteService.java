@@ -1,32 +1,44 @@
 package com.seguro.cliente_service.service;
 
 import com.seguro.cliente_service.dto.*;
+import com.seguro.cliente_service.entity.Cliente;
+import com.seguro.cliente_service.exception.ResourceNotFoundException;
 import com.seguro.cliente_service.mapper.ClienteMapper;
-import com.seguro.cliente_service.model.Cliente;
 import com.seguro.cliente_service.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
 public class ClienteService {
 
     private final ClienteRepository repository;
+    private final ClienteMapper mapper;
 
-    public ClienteResponse crearCliente(ClienteRequest request) {
+    public Mono<ClienteResponse> crear(ClienteRequest request) {
 
-        Cliente cliente = ClienteMapper.toEntity(request);
+        return Mono.fromCallable(() -> {
 
-        Cliente saved = repository.save(cliente);
+            if (repository.existsByDocumento(request.documento())) {
+                throw new RuntimeException("Cliente ya existe");
+            }
 
-        return ClienteMapper.toResponse(saved);
+            Cliente cliente = mapper.toEntity(request);
+
+            Cliente guardado = repository.save(cliente);
+
+            return mapper.toResponse(guardado);
+
+        });
     }
 
-    public ClienteResponse buscarPorDocumento(String documento) {
+    public Mono<ClienteResponse> buscarPorDocumento(String documento) {
 
-        Cliente cliente = repository.findByDocumento(documento)
-                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
-
-        return ClienteMapper.toResponse(cliente);
+        return Mono.fromCallable(() ->
+                repository.findByDocumento(documento)
+                        .map(mapper::toResponse)
+                        .orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado"))
+        );
     }
 }

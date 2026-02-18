@@ -1,4 +1,4 @@
-package com.seguro.cliente_service.model;
+package com.seguro.cliente_service.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -7,20 +7,20 @@ import lombok.*;
 @Table(name = "clientes")
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String nombre;
-
     @Column(nullable = false, unique = true)
     private String documento;
+
+    @Column(nullable = false)
+    private String nombre;
 
     @Column(nullable = false)
     private String email;
