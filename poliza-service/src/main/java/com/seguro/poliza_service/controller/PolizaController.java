@@ -2,21 +2,18 @@ package com.seguro.poliza_service.controller;
 
 import com.seguro.poliza_service.dto.PolizaRequest;
 import com.seguro.poliza_service.dto.PolizaResponse;
-import com.seguro.poliza_service.service.PolizaService;
+import com.seguro.poliza_service.service.IPolizaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
-
-import java.util.List;
-
 @RestController
 @RequestMapping("/polizas")
 @RequiredArgsConstructor
 public class PolizaController {
 
-    private final PolizaService service;
+    private final IPolizaService service;
 
     @PostMapping
     public Mono<PolizaResponse> emitir(@Valid @RequestBody PolizaRequest request) {
@@ -24,14 +21,12 @@ public class PolizaController {
     }
 
     @GetMapping
-    public Mono<List<PolizaResponse>> listar() {
-        return Mono.fromCallable(service::listar)
-                .subscribeOn(Schedulers.boundedElastic());
+    public Flux<PolizaResponse> listar() {
+        return service.listar();
     }
 
     @GetMapping("/cliente/{documento}")
-    public Mono<List<PolizaResponse>> porCliente(@PathVariable String documento) {
-        return Mono.fromCallable(() -> service.porCliente(documento))
-                .subscribeOn(Schedulers.boundedElastic());
+    public Flux<PolizaResponse> porCliente(@PathVariable String documento) {
+        return service.porCliente(documento);
     }
 }
