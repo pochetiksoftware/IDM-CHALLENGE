@@ -1,13 +1,11 @@
 package com.seguro.cliente_service.repository;
 
 import com.seguro.cliente_service.entity.Cliente;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import reactor.core.publisher.Mono;
 
-import java.util.Optional;
+public interface ClienteRepository extends ReactiveCrudRepository<Cliente, Long> {
 
-public interface ClienteRepository extends JpaRepository<Cliente, Long> {
-
-    boolean existsByDocumento(String documento);
-
-    Optional<Cliente> findByDocumento(String documento);
+    Mono<Boolean> existsByDocumento(String documento);
+    Mono<Cliente> findByDocumento(String documento);
 }

@@ -3,6 +3,7 @@ package com.seguro.cliente_service.service;
 import com.seguro.cliente_service.dto.*;
 import com.seguro.cliente_service.mapper.ClienteMapper;
 import com.seguro.cliente_service.repository.ClienteRepository;
+import com.seguro.cliente_service.service.impl.ClienteService;
 import org.junit.jupiter.api.Test;
 import reactor.test.StepVerifier;
 
