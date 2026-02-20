@@ -50,23 +50,18 @@ class PolizaServiceTest {
 
     @BeforeEach
     void setUp() {
-        // 1. Request inicial
         request = new PolizaRequest("123", "AUTO", BigDecimal.valueOf(1000));
 
-        // 2. Entity Poliza (Asegúrate que el orden sea: id, documentoCliente, tipoSeguro, prima, estado)
         poliza = new Poliza(1L, "123", "AUTO", BigDecimal.valueOf(1000), "PENDIENTE");
 
-        // 3. ClienteResponse (id, documento, nombre, email, estado)
         clienteRes = new ClienteResponse(1L, "123", "Juan", "juan@ntt.com", "ACTIVO");
 
-        // 4. PolizaResponse corregido según tu error (id, documentoCliente, tipoSeguro, prima, estado)
         response = new PolizaResponse(1L, "123", "AUTO", BigDecimal.valueOf(1000), "EMITIDA");
     }
 
     @Test
     @DisplayName("Debe emitir póliza como EMITIDA cuando el riesgo es aprobado")
     void emitirPolizaOk() {
-        // GIVEN
         RiskResult riskOk = new RiskResult(RiskLevel.BAJO, BigDecimal.valueOf(1000), true, "OK");
 
         when(clienteClient.obtenerCliente(anyString())).thenReturn(Mono.just(clienteRes));
@@ -75,7 +70,6 @@ class PolizaServiceTest {
         when(repository.save(any())).thenReturn(poliza);
         when(mapper.toResponse(any())).thenReturn(response);
 
-        // WHEN & THEN
         StepVerifier.create(polizaService.emitir(request))
                 .expectNextMatches(res -> res.estado().equals("EMITIDA"))
                 .verifyComplete();
@@ -86,7 +80,6 @@ class PolizaServiceTest {
     @Test
     @DisplayName("Debe emitir póliza como RECHAZADA cuando el cliente está inactivo")
     void emitirPolizaRechazada() {
-        // GIVEN
         ClienteResponse clienteInactivo = new ClienteResponse(1L, "123", "Juan", "j@j.com", "INACTIVO");
         RiskResult riskAlto = new RiskResult(RiskLevel.ALTO, BigDecimal.valueOf(1000), false, "Cliente inactivo");
 
@@ -98,7 +91,6 @@ class PolizaServiceTest {
         PolizaResponse resRechazada = new PolizaResponse(1L, "123", "AUTO", BigDecimal.valueOf(1000), "RECHAZADA");
         when(mapper.toResponse(any())).thenReturn(resRechazada);
 
-        // WHEN & THEN
         StepVerifier.create(polizaService.emitir(request))
                 .expectNextMatches(res -> res.estado().equals("RECHAZADA"))
                 .verifyComplete();
@@ -118,7 +110,6 @@ class PolizaServiceTest {
                 .expectNextMatches(res -> res.estado().equals("PENDIENTE_REVISION"))
                 .verifyComplete();
 
-        // Verificamos que no se evalúe riesgo si falla la comunicación
         verify(riskEngine, never()).evaluar(any(), anyString());
     }
 
