@@ -1,7 +1,7 @@
 package com.seguro.cliente_service.controller;
 
 import com.seguro.cliente_service.dto.*;
-import com.seguro.cliente_service.service.ClienteService;
+import com.seguro.cliente_service.service.IClienteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +12,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class ClienteController {
 
-    private final ClienteService service;
+    private final IClienteService service;
 
     @PostMapping
     public Mono<ClienteResponse> crear(@Valid @RequestBody ClienteRequest request) {

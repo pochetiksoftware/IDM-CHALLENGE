@@ -1,11 +1,9 @@
 package com.seguro.poliza_service.repository;
 
 import com.seguro.poliza_service.entity.Poliza;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import reactor.core.publisher.Flux;
 
-import java.util.List;
-
-public interface PolizaRepository extends JpaRepository<Poliza, Long> {
-
-    List<Poliza> findByDocumentoCliente(String documentoCliente);
+public interface PolizaRepository extends ReactiveCrudRepository<Poliza, Long> {
+    Flux<Poliza> findByDocumentoCliente(String documentoCliente);
 }

@@ -6,6 +6,7 @@ import com.seguro.poliza_service.dto.PolizaRequest;
 import com.seguro.poliza_service.mapper.PolizaMapper;
 import com.seguro.poliza_service.repository.PolizaRepository;
 import com.seguro.poliza_service.risk.RiskEngine;
+import com.seguro.poliza_service.service.impl.PolizaService;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
